@@ -1,5 +1,4 @@
 ssh_options[:forward_agent] = true
-default_run_options[:pty] = true
 
 require 'json'
 set :user_details, JSON.parse(IO.read('dna.json'))
