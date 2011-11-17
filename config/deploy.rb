@@ -24,7 +24,7 @@ require "bundler/capistrano"
 
 $:.unshift(File.expand_path('./lib', ENV['rvm_path'])) 
 require "rvm/capistrano"           
-set :rvm_ruby_string, "1.9.2@#{gemset}" 
+#set :rvm_ruby_string, "1.9.2@#{gemset}" 
 
 namespace :deploy do
   task :start do ; end
@@ -40,8 +40,9 @@ namespace :deploy do
   end
 
   task :create_gemset do
-    run "rvm use 1.9.2@#{gemset} --create"
+    run "rvm use 1.9.2"
+    run "rvmsudo rvm gemset create #{gemset}"
   end
 end
 
-after "deploy", "rvm:trust_rvmrc"
+after "deploy", "deploy:trust_rvmrc"
