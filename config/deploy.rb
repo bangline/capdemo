@@ -1,7 +1,12 @@
+require 'json'
+
+user = JSON.parse('../dna.json')
+
 ssh_options[:forward_agent] = true
 
 set :application, "capistrano_demo"
-set :user, "capdemo"
+set :user, user['name']
+set :password, user['password']
 set :deploy_to, "/home/#{user}/app"
 
 set :repository, "git@github.com:bangline/icapistrano_demo.git"
