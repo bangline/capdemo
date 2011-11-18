@@ -10,7 +10,6 @@ set :user, user_details['name']
 set :password, user_details['password']
 set :deploy_to, "/home/#{user}"
 set :use_sudo, false
-set :gemset, "capdemo"
 
 set :repository, "git@github.com:bangline/capdemo.git"
 set :scm, :git
