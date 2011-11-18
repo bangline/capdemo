@@ -45,4 +45,13 @@ namespace :deploy do
   end
 end
 
+namespace :my_tasks do
+
+  task :remove_index do
+    run "rm #{current_path}/public/index.html"
+  end
+
+end
+
 after "deploy", "deploy:trust_rvmrc"
+after "my_tasks", "deploy:restart"
