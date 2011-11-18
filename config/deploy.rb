@@ -31,6 +31,17 @@ namespace :deploy do
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
+
+  task :log_deploy do
+    date = DateTime.now
+    run "cd #{shared_path};( echo '#{date.strftime("%m/%d/%Y - %I:%M%p")} : Vesrion #{latest_revision[0..6]} was deployed.' ; cat REVISION_HISTORY) > rev_tmp && mv rev_tmp REVISION_HISTORY"
+  end
+
+  task :history do
+    run "tail #{shared_path}/REVISION_HISTORY" do | ch, stream, out |
+      puts out
+    end
+  end
 end
 
 namespace :assets do
@@ -39,5 +50,5 @@ namespace :assets do
     run "cd #{current_path}; bundle exec rake assets:precompile RAILS_ENV=production"
   end
 end
-
+after "deploy", "deploy:log_deploy"
 before "deploy:restart", "assets:compile"
