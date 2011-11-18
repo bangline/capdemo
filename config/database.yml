@@ -20,6 +20,6 @@ test:
 
 production:
   adapter: sqlite3
-  database: /home/capdemo/shared/db/system/production.sqlite3
+  database: /home/capdemo/shared/system/db/production.sqlite3
   pool: 5
   timeout: 5000
