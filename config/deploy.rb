@@ -16,6 +16,8 @@ set :repository, "git@github.com:bangline/capdemo.git"
 set :scm, :git
 set :branch, "master"
 
+set :deploy_via, :remote_cache
+
 role :app, domain
 role :web, domain
 role :db, domain, :primary => true
@@ -35,14 +37,6 @@ namespace :deploy do
     run "cd #{current_path}; rm -rf public/assets/*"
     run "cd #{current_path}; bundle exec rake assets:precompile RAILS_ENV=production"
   end
-end
-
-namespace :my_tasks do
-
-  task :remove_index do
-    run "rm #{current_path}/public/index.html"
-  end
-
 end
 
 before "deploy:restart", "deploy:compile_assets"
