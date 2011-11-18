@@ -31,11 +31,13 @@ namespace :deploy do
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
+end
 
-  task :compile_assets, :roles => :web, :except => { :no_release => true } do
+namespace :assets do
+  task :compile, :roles => :web, :except => { :no_release => true } do
     run "cd #{current_path}; rm -rf public/assets/*"
     run "cd #{current_path}; bundle exec rake assets:precompile RAILS_ENV=production"
   end
 end
 
-before "deploy:restart", "deploy:compile_assets"
+before "deploy:restart", "assets:compile"
