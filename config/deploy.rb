@@ -34,6 +34,7 @@ namespace :deploy do
 
   task :log_deploy do
     date = DateTime.now
+    run "cd #{shared_path}; touch REVISION_HISTORY"
     run "cd #{shared_path};( echo '#{date.strftime("%m/%d/%Y - %I:%M%p")} : Vesrion #{latest_revision[0..6]} was deployed.' ; cat REVISION_HISTORY) > rev_tmp && mv rev_tmp REVISION_HISTORY"
   end
 
