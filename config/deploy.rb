@@ -22,10 +22,6 @@ role :db, domain, :primary => true
 
 require "bundler/capistrano"
 
-$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) 
-require "rvm/capistrano"           
-#set :rvm_ruby_string, "1.9.2@#{gemset}" 
-
 namespace :deploy do
   task :start do ; end
 
@@ -35,13 +31,9 @@ namespace :deploy do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
 
-  task :trust_rvmrc do
-    run "rvm rvmrc trust #{release_path}"
-  end
-
-  task :create_gemset do
-    run "rvm use 1.9.2"
-    run "rvmsudo rvm gemset create #{gemset}"
+  task :compile_assets, :roles => :web, :except => { :no_release => true } do
+    run "cd #{current_path}; rm -rf public/assets/*"
+    run "cd #{current_path}; bundle exec rake assets:precompile RAILS_ENV=production"
   end
 end
 
@@ -53,5 +45,4 @@ namespace :my_tasks do
 
 end
 
-after "deploy", "deploy:trust_rvmrc"
-after "my_tasks", "deploy:restart"
+before "deploy:restart", "deploy:compile_assets"
